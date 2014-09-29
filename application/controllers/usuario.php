@@ -8,7 +8,7 @@
 			parent::__construct();
 
 			$this->load->model('Usuarios');
-			$this->load->model('tweets');		//criado ##########
+			//$this->load->model('tweets');		//criado ##########
 
 			$this->erro = '';
 		} // function
@@ -209,13 +209,13 @@
 						'rules' => 'required|min_length[6]'
 					)
 				)
-				'postartweet' => array(		//criado ##########
+				/*'postartweet' => array(		//criado ##########
 					array(
 						'field' => 'tweet',
 						'label' => 'Tweet',
 						'rules' => 'required|min_length[1]'
 					),
-				),
+				),*/
 			);
 
 			$this->form_validation->set_rules($grupo);
@@ -241,7 +241,7 @@
 			$this->session->sess_destroy();
 			redirect(base_url());
 		}
-
+/*
 		public function postartweet()		//criado ##########
 
 		{
@@ -258,8 +258,8 @@
 
 			}
 
-
-
+		}
+*/
 
 	} // fim da classe
 
