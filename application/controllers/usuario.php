@@ -8,7 +8,8 @@
 			parent::__construct();
 
 			$this->load->model('Usuarios');
-			//$this->load->model('tweets');		//criado ##########
+			$this->load->model('Tweets');		//criado ##########
+			$this->load->model('Seguidores');	//criado ##########
 
 			$this->erro = '';
 		} // function
@@ -208,14 +209,21 @@
 						'label' => 'Senha',
 						'rules' => 'required|min_length[6]'
 					)
-				)
-				/*'postartweet' => array(		//criado ##########
+				),
+				'postartweet' => array(		//criado ##########
 					array(
-						'field' => 'tweet',
+						'field' => 'texto',
 						'label' => 'Tweet',
 						'rules' => 'required|min_length[1]'
-					),
-				),*/
+					)
+				),
+				'buscar' => array(		//criado ##########
+					array(
+						'field' => 'buscar',
+						'label' => 'Buscar',
+						'rules' => 'required|min_length[1]'
+					)
+				)
 			);
 
 			$this->form_validation->set_rules($grupo);
@@ -241,7 +249,7 @@
 			$this->session->sess_destroy();
 			redirect(base_url());
 		}
-/*
+
 		public function postartweet()		//criado ##########
 
 		{
@@ -251,15 +259,69 @@
 			// se o a validação do formulário foi bem sucedida
 			if ($this->form_validation->run())
 			{
+				$dados = array();
+				$dados["texto"]=$this->input->post("texto");
+				$dados["codigo_usuario"]=$this->session->userdata("user_id");
+				$dados["data_hora_postagem"]=date("Y-m-d h:i:s");
 				// insere os dados no bd
-				$id = $this->Tweets->insert(
-					$this->input->post());
+				$id = $this->Tweets->insert($dados);
 
-
+				redirect(base_url());
 			}
-
 		}
-*/
+
+		public function seguir()
+		{
+			$dados["codigo_seguidor"]=$this->session->userdata("user_id");
+			$dados["codigo_seguido"]=$this->input->post("codigo");
+			$id = $this->Seguidores->insert($dados);
+
+			redirect(base_url());				
+		}
+
+		public function naoseguir()
+		{
+			$id_seguidor = $this->session->userdata("user_id");
+			$id_seguido = $this->input->post("codigo");
+			$id = $this->Seguidores->delete($id_seguidor,$id_seguido);
+
+			redirect(base_url());
+		}
+
+		public function buscar()		//criado ##########
+
+		{ 
+			
+			// regras para validação do formulário
+			$this->_set_validation_rules('buscar');
+
+			// se o a validação do formulário foi bem sucedida
+			if ($this->form_validation->run())
+			{
+				
+				// procura os dados no bd
+
+				$usuario = $this->Usuarios->get($this->session->userdata('user_id'));
+				$dados = array();
+				$dados['usuario']        = $usuario;
+				$dados['num_seguidores'] = $this->Seguidores->countFollowers($usuario->codigo);
+				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
+				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
+				
+				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
+				foreach ($resultados as $resultado) {
+					$resultado->num_seguidores=$this->Seguidores->countFollowers($resultado->codigo);
+					$resultado->num_seguindo=$this->Seguidores->countFollowing($resultado->codigo);
+					$resultado->num_tweets=$this->Tweets->countByUser($resultado->codigo);
+					//$resultado->codigo_seguido=$this->Seguidores->getBySeguido($resultado->codigo);
+				}
+				$dados["resultados"]=$resultados;
+				$this->load->view("principal",$dados);
+
+				
+			}
+		}
+
 
 	} // fim da classe
 

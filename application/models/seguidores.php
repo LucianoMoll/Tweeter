@@ -23,4 +23,9 @@
 			return $this->db->where(array('codigo_seguidor' => $id_seguidor, 
 				'codigo_seguido' => $id_seguido))->delete('seguidores');
 		}
+
+		public function getBySeguido($id)		// não funciona 
+		{
+			return $this->db->where('codigo_seguido', $id)->get('seguidores')->row();
+		}
 	}

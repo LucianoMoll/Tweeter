@@ -15,8 +15,7 @@
 
 		public function get($id)
 		{
-			return $this->db->where('codigo', 
-				$id)->get('usuarios')->row();
+			return $this->db->where('codigo', $id)->get('usuarios')->row();
 		}
 
 		public function getByEmail($email)
@@ -28,6 +27,12 @@
 		{
 			return $this->db->where('login', $login)->get('usuarios')->row();
 		}
+
+		public function buscar($name)
+		{
+			return $this->db->like('nome', $name)->get('usuarios')->result();
+		}
 	}
+	
 
 /* End of file usuarios.php */

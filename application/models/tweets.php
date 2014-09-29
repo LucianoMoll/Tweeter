@@ -5,13 +5,13 @@
 		{
 			return $this->db->where('codigo_usuario', $id_usuario)->count_all_results('tweets');
 		}
-/*
+
 		public function insert($dados)				//criado ##########
 		{
 			$this->db->insert('tweets', $dados);
 			return $this->db->insert_id();
 		}
-		*/
+
 	}
 
 /* End of file tweets.php */

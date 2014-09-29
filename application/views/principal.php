@@ -54,6 +54,7 @@
         text-decoration: none;
         font-size: 24px;
       }
+      
     </style>
   </head>
   <body>
@@ -70,7 +71,7 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
           <div class="row">
             <div class="col-lg-6 col-md-6">
               <ul class="nav navbar-nav">
@@ -86,13 +87,19 @@
               </div>
               <ul class="nav navbar-nav navbar-right">
 
-                <form class="navbar-form navbar-left" role="search">
+                <form class="navbar-form navbar-left" role="search" method="post"
+                action="<?=base_url();?>usuario/buscar">
                   <div class="form-group">
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Buscar no tweeter">
-                      <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i></button>
-                      </span>
+
+                      
+                        <input type="text" name="buscar" class="form-control" placeholder="Buscar no tweeter">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="submit" ><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+
+            
+
                     </div><!-- /input-group -->
                   </div>
                 </form>
@@ -114,7 +121,7 @@
           <div class="panel-body">
             <div class="row" style="background-color: #f3f3f3; padding-top: 12px;">
               <div class="col-lg-3 col-md-3 col-sm-3">
-                <img src="imagens/thumbnail.png" class="thumbnail" style="width: 70px; height: 70px;">
+                <img src="<?=base_url()?>imagens/thumbnail.png" class="thumbnail" style="width: 70px; height: 70px;">
               </div>
               <div class="col-lg-9 col-md-9 col-sm-9" style="padding-top: 22px;">
                 <a class="perfil"><?=$usuario->nome;?></a><br>
@@ -139,38 +146,22 @@
 
             <form role="form" method="post"
               action="<?=base_url();?>usuario/postartweet">
-
-              <div class="panel-footer">  
-
-                
-                  <textarea type="text" id="tweet" name="tweet" class="form-control" 
+              <div class="panel-footer">                 
+                  <textarea type="text" id="tweet" name="texto" class="form-control" 
                     maxlength="5" rows="1" 
                     onfocus="this.rows=10, mostrar()"  
-                    onblur="this.rows=1, ocultar(), limpar(this.value,5,'spcontando')" 
+                    onblur="if($('#tweet').val() == '') {this.rows=1; ocultar(); limpar(this.value,5,'spcontando')}" 
                     onkeyup="mostrarResultado(this.value,5,'spcontando')"
                     style="resize:none" placeholder="Publique um novo tweet..."></textarea>
-
-                    <span  class="invisible" id="spcontando" style="font-family:Georgia;">5</span><br />
-    
-                     <!-- panel-footer <style>
-                     #bt{
-                      visibility:hidden;
-                     }
-                     #spcontando{
-                      visibility:hidden;
-                     }
-                     </style> -->
-
+                    <span  id="spcontando" style="font-family:Georgia; display: none;">5</span><br />
                     <script>
                         function mostrar() {
-                            document.getElementById('bt').style.visibility="visible"; 
-                            document.getElementById('spcontando').style.visibility="visible"; 
-                            //document.getElementById('bt').style.display="block";
+                            $('#bt').show();
+                            $('#spcontando').show();                   
                           }
                         function ocultar() {
-                            document.getElementById('bt').style.visibility="hidden";
-                            document.getElementById('spcontando').style.visibility="hidden";
-                            //document.getElementById('bt').style.display="none"; 
+                            $('#bt').hide();
+                            $('#spcontando').hide();
                           }
                         function mostrarResultado(box,num_max,campospan){
                               var contagem_regre = (5-box.length);
@@ -180,14 +171,11 @@
                           document.getElementById('tweet').value = '';
                           document.getElementById(campospan).innerHTML = 5;
                         }
-
                     </script>
-
-                  <button  id="bt" type="submit" class="btn btn-primary invisible ">Gravar
-                  </button>       
-
+                  <button  id="bt" type="submit" class="btn btn-primary pull-right"  
+                  style="display: none;">Gravar</button>
+                  <div   style="clear: both;"></div>       
               </div><!-- panel-footer -->
-
             </form>
 
          </div><!-- panel -->
@@ -204,6 +192,81 @@
               <big style="font-size: 22px;">Tweets</big>
             </div>
             <div class="panel-body">
+
+                <?php if (isset($resultados))
+                  foreach ($resultados as $resultado) {
+                ?>
+                   <div class="panel panel-default">   
+                    <div class="panel-body" >
+                        
+                     <form role="form" method="post">
+                      <input type="hidden" name="codigo"
+                        id="codigo" value="<?=$resultado->codigo?>">
+
+                      <input type="hidden" name="codigo_seguido"              
+                        id="codigo_seguido" value="<?=$resultado->codigo?>"> 
+
+                       <script> //como colocar codigo do seguido no imput acima??
+                                //para poder fazer comparação se já estou seguindo ou não.
+                        function mostrar() {    
+                            $('#seguir').show();
+                            $('#naoseguir').show();                 
+                          }
+                        </script>
+
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+
+                        <label for="nome">Nome completo</label>
+                        <input type="text" name="nome" id="nome" readonly
+                        class="form-control" placeholder="Nome completo"
+                        value="<?=$resultado->nome?>">
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <label for="email">e-mail</label>
+                        <input type="text" name="email" id="email" readonly
+                        class="form-control" placeholder="e-mail"
+                        value="<?=$resultado->email?>">
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <label for="login">Nome de usuário</label>
+                        <input type="text" name="login" id="login" readonly
+                        class="form-control" placeholder="Login"
+                        value="<?=$resultado->login?>">
+                      </div>
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                        <label for="descricao">Descrição</label>
+                        <input name="descricao" id="descricao" readonly
+                          class="form-control" placeholder="Descrição detalhada da conta"
+                          value="<?=$resultado->descricao?>">
+                      </div>
+                                   
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">TWEETS</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_tweets?></a>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">SEGUINDO</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_seguindo?></a>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">SEGUIDORES</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_seguidores?></a>
+                      </div>
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                        
+                        <button id="seguir" type="submit" onclick="action='<?=base_url();?>usuario/seguir'"
+                          class="btn btn-primary ">Seguir
+                        </button>
+
+                        <button id="naoseguir" type="submit" onclick="action='<?=base_url();?>usuario/naoseguir'"
+                          class="btn btn-primary pull-right">Deixar de Seguir
+                        </button>
+                      </div> 
+                      </form>                     
+                     </div>
+                  </div>
+                <?php
+                } ?>
 
             </div>
           </div><!-- panel -->
