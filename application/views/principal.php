@@ -148,12 +148,12 @@
               action="<?=base_url();?>usuario/postartweet">
               <div class="panel-footer">                 
                   <textarea type="text" id="tweet" name="texto" class="form-control" 
-                    maxlength="5" rows="1" 
-                    onfocus="this.rows=10, mostrar()"  
-                    onblur="if($('#tweet').val() == '') {this.rows=1; ocultar(); limpar(this.value,5,'spcontando')}" 
-                    onkeyup="mostrarResultado(this.value,5,'spcontando')"
+                    maxlength="140" rows="1" 
+                    onfocus="this.rows=4, mostrar()"  
+                    onblur="if($('#tweet').val() == '') {this.rows=1; ocultar(); limpar(this.value,140,'spcontando')}" 
+                    onkeyup="mostrarResultado(this.value,140,'spcontando')"
                     style="resize:none" placeholder="Publique um novo tweet..."></textarea>
-                    <span  id="spcontando" style="font-family:Georgia; display: none;">5</span><br />
+                    <span  id="spcontando" style="font-family:Georgia; display: none;">140</span><br />
                     <script>
                         function mostrar() {
                             $('#bt').show();
@@ -164,12 +164,12 @@
                             $('#spcontando').hide();
                           }
                         function mostrarResultado(box,num_max,campospan){
-                              var contagem_regre = (5-box.length);
+                              var contagem_regre = (140-box.length);
                               document.getElementById(campospan).innerHTML = contagem_regre;
                             }  
                         function limpar(box,num_max,campospan){
                           document.getElementById('tweet').value = '';
-                          document.getElementById(campospan).innerHTML = 5;
+                          document.getElementById(campospan).innerHTML = 140;
                         }
                     </script>
                   <button  id="bt" type="submit" class="btn btn-primary pull-right"  
