@@ -309,11 +309,23 @@
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
 				
 				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
+
 				foreach ($resultados as $resultado) {
 					$resultado->num_seguidores=$this->Seguidores->countFollowers($resultado->codigo);
 					$resultado->num_seguindo=$this->Seguidores->countFollowing($resultado->codigo);
 					$resultado->num_tweets=$this->Tweets->countByUser($resultado->codigo);
-					//$resultado->codigo_seguido=$this->Seguidores->getBySeguido($resultado->codigo);
+					//$resultado->codigo_seguidor=$this->Seguidores->getBySeguido($resultado->codigo)->codigo_seguidor;
+					
+					if (!$this->Seguidores->verificarSeguidor(
+						$this->session->userdata('user_id'),
+						$resultado->codigo)){
+						$resultado->seguindo = FALSE;
+					}
+					else{
+						$resultado->seguindo = TRUE;
+					}
+
+
 				}
 				$dados["resultados"]=$resultados;
 				$this->load->view("principal",$dados);

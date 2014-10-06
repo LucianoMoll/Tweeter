@@ -197,22 +197,15 @@
                   foreach ($resultados as $resultado) {
                 ?>
                    <div class="panel panel-default">   
+
+                    <?php if (($usuario->login) == ($resultado->login)) {?>
+
                     <div class="panel-body" >
                         
                      <form role="form" method="post">
-                      <input type="hidden" name="codigo"
+
+                      <input  name="codigo" type="hidden"
                         id="codigo" value="<?=$resultado->codigo?>">
-
-                      <input type="hidden" name="codigo_seguido"              
-                        id="codigo_seguido" value="<?=$resultado->codigo?>"> 
-
-                       <script> //como colocar codigo do seguido no imput acima??
-                                //para poder fazer comparação se já estou seguindo ou não.
-                        function mostrar() {    
-                            $('#seguir').show();
-                            $('#naoseguir').show();                 
-                          }
-                        </script>
 
                       <div class="col-lg-4 col-md-4 col-sm-4">
 
@@ -238,8 +231,8 @@
                         <input name="descricao" id="descricao" readonly
                           class="form-control" placeholder="Descrição detalhada da conta"
                           value="<?=$resultado->descricao?>">
-                      </div>
-                                   
+                      </div>                    
+
                       <div class="col-lg-4 col-md-4 col-sm-4">
                         <small class="sum-label">TWEETS</small><br>
                         <a class="sum" value="#"><?=$resultado->num_tweets?></a>
@@ -253,18 +246,88 @@
                         <a class="sum" value="#"><?=$resultado->num_seguidores?></a>
                       </div>
                       <div class="col-lg-12 col-md-12 col-sm-12">
+
+
+                        <!--  sem botões -->
+
+                      </div>
+                    </div> <?php } else { ?>
+
+                    <div class="panel-body" >
                         
-                        <button id="seguir" type="submit" onclick="action='<?=base_url();?>usuario/seguir'"
+                     <form role="form" method="post">
+
+                      <input  name="codigo" type="hidden"
+                        id="codigo" value="<?=$resultado->codigo?>">
+
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+
+                        <label for="nome">Nome completo</label>
+                        <input type="text" name="nome" id="nome" readonly
+                        class="form-control" placeholder="Nome completo"
+                        value="<?=$resultado->nome?>">
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <label for="email">e-mail</label>
+                        <input type="text" name="email" id="email" readonly
+                        class="form-control" placeholder="e-mail"
+                        value="<?=$resultado->email?>">
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <label for="login">Nome de usuário</label>
+                        <input type="text" name="login" id="login" readonly
+                        class="form-control" placeholder="Login"
+                        value="<?=$resultado->login?>">
+                      </div>
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                        <label for="descricao">Descrição</label>
+                        <input name="descricao" id="descricao" readonly
+                          class="form-control" placeholder="Descrição detalhada da conta"
+                          value="<?=$resultado->descricao?>">
+                      </div>                    
+
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">TWEETS</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_tweets?></a>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">SEGUINDO</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_seguindo?></a>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-4">
+                        <small class="sum-label">SEGUIDORES</small><br>
+                        <a class="sum" value="#"><?=$resultado->num_seguidores?></a>
+                      </div>
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+
+
+                        <?php if (!$resultado->seguindo)  { ?>
+
+                        <button  id="seguir" type="submit" onclick="action='<?=base_url();?>usuario/seguir'"
                           class="btn btn-primary ">Seguir
                         </button>
 
-                        <button id="naoseguir" type="submit" onclick="action='<?=base_url();?>usuario/naoseguir'"
+                        
+                        <?php } else {?>
+
+                        <button  id="naoseguir" type="submit" onclick="action='<?=base_url();?>usuario/naoseguir'"
                           class="btn btn-primary pull-right">Deixar de Seguir
                         </button>
-                      </div> 
+
+                        <?php } ?>
+
+
+                      </div>
+
+
+
+
                       </form>                     
                      </div>
                   </div>
+                <?php
+                } ?>
+
                 <?php
                 } ?>
 
@@ -276,5 +339,6 @@
 
   	<script type="text/javascript" src="<?=base_url();?>js/jquery.min.js"></script>
     <script type="text/javascript" src="<?=base_url();?>js/bootstrap.min.js"></script>
+  
   </body>
 </html>
