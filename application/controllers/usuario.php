@@ -411,21 +411,21 @@
 				$dados['num_seguidores'] = $this->Seguidores->countFollowers($usuario->codigo);
 				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
-				
+
 
 				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
 
 				foreach ($resultados as $resultado) {
 
 					$resultado->mostrarseguir=	TRUE;
-
+					$resultado->texto = $this->Tweets->getByTexto($resultado->codigo);
 
 					if (!$this->Seguidores->verificarSeguidor(
 						$this->session->userdata('user_id'),
 						$resultado->codigo)){
 						$resultado->seguindo = FALSE;
 
-						
+
 					}
 					else{
 						$resultado->seguindo = TRUE;
@@ -441,6 +441,26 @@
 				
 				
 				
+		}
+
+		public function mostrartweet()		//criado ##########
+
+		{ 
+
+				// procura os dados no bd
+
+				$usuario = $this->Usuarios->get($this->session->userdata('user_id'));
+				$dados = array();
+				$dados['usuario']        = $usuario;
+				$dados['num_seguidores'] = $this->Seguidores->countFollowers($usuario->codigo);
+				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
+				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
+
+				
+
+
+				$this->load->view("principal",$dados);
+
 		}
 
 

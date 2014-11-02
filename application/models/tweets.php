@@ -12,6 +12,21 @@
 			return $this->db->insert_id();
 		}
 
+		public function getByCodigo($codigo)
+		{
+			return $this->db->where('codigo', $codigo)->get('tweets')->row();
+		}
+
+		public function getByTexto($texto)
+		{
+			return $this->db->where('texto', $texto)->get('tweets')->row();
+		}
+
+		public function getByData($data)
+		{
+			return $this->db->where('data_hora_postagem', $data)->get('tweets')->row();
+		}
+
 	}
 
 /* End of file tweets.php */

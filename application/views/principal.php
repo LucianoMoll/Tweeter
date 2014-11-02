@@ -132,7 +132,7 @@
             <div class="row">
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <small class="sum-label">TWEETS</small><br>
-                <a class="sum" href="#"><?=$num_tweets;?></a>
+                <a class="sum" href="<?=base_url();?>usuario/mostrartweet"><?=$num_tweets;?></a>
               </div>
               <div class="col-lg-4 col-md-4 col-sm-4">
                 <small class="sum-label">SEGUINDO</small><br>
@@ -226,6 +226,11 @@
                         <input type="text" name="nome" id="nome" readonly
                         class="form-control" placeholder="Nome completo"
                         value="<?=$resultado->nome?>">
+
+
+
+
+
                       </div>
                       <div class="col-lg-4 col-md-4 col-sm-4">
                         <label for="email">e-mail</label>
