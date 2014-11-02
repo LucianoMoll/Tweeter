@@ -131,7 +131,7 @@
 
 		public function gravarcontacompleta()
 		{
-			$this->_set_validation_rules('completarconta');
+			$this->_set_validation_rules('gravarcontacompleta');		## Modificado erro
 
 			if ($this->form_validation->run())
 			{
@@ -164,7 +164,7 @@
 						'label' => 'Nome',
 						'rules' => 'required|min_length[5]'
 					),
-					array(
+					array(										## erro pode colocar sem @
 						'field' => 'email',
 						'label' => 'e-mail',
 						'rules' => 
@@ -183,7 +183,7 @@
 						'label' => 'Nome',
 						'rules' => 'required|min_length[5]'
 					),
-					array(
+					array(										## erro pode colocar sem @
 						'field' => 'email',
 						'label' => 'e-mail',
 						'rules' => 
@@ -195,6 +195,30 @@
 						'label' => 'Nome de usuário',
 						'rules' => 'required|min_length[6]|callback_login_check'
 					)
+				),	
+				'atualizarcontacompleta' => array(
+					array(
+						'field' => 'nome',
+						'label' => 'Nome',
+						'rules' => 'required|min_length[5]'
+					),
+					array(										## erro pode colocar sem @
+						'field' => 'email',
+						'label' => 'e-mail',
+						'rules' => 
+							'required|valid_email|
+							is_unique[usuarios.email]'
+					),
+					array(
+						'field' => 'login',
+						'label' => 'Nome de usuário',
+						'rules' => 'required|min_length[6]|callback_login_check'
+					),	
+					array(
+						'field' => 'senha',
+						'label' => 'Senha',
+						'rules' => 'required|min_length[6]'
+					)				
 				),
 				'autenticar' => array(
 					array(
@@ -307,7 +331,8 @@
 				$dados['num_seguidores'] = $this->Seguidores->countFollowers($usuario->codigo);
 				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
-				
+				$dados['seguir']		 = FALSE;
+
 				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
 
 				foreach ($resultados as $resultado) {
@@ -315,7 +340,8 @@
 					$resultado->num_seguindo=$this->Seguidores->countFollowing($resultado->codigo);
 					$resultado->num_tweets=$this->Tweets->countByUser($resultado->codigo);
 					//$resultado->codigo_seguidor=$this->Seguidores->getBySeguido($resultado->codigo)->codigo_seguidor;
-					
+					$resultado->mostrarseguir=	FALSE;
+
 					if (!$this->Seguidores->verificarSeguidor(
 						$this->session->userdata('user_id'),
 						$resultado->codigo)){
@@ -332,6 +358,89 @@
 
 				
 			}
+		}
+
+		public function atualizarconta()		//criado ##########
+
+		{ 
+				// monta o vetor de dados
+				$usuario = $this->Usuarios->get($this->session->userdata('user_id'));
+				$dados = array();
+				$dados['usuario'] = $usuario;
+				// carrega a view
+				$this->load->view('atualizarconta', $dados);
+	
+			
+		}
+
+		public function atualizarcontacompleta()
+		{
+			$this->_set_validation_rules('atualizarcontacompleta');
+
+			if ($this->form_validation->run())
+			{
+				// atualiza os dados (complementa a conta)
+				$this->Usuarios->update($this->input->
+					post('codigo'), $this->input->post());
+
+				// gravar dados na sessão (session)
+				$this->session->set_userdata(
+					array(
+						'user_id' => $this->input->post('codigo')
+						)
+					);
+
+				// redirecionar para timeline
+				redirect(base_url());
+			}
+			else {
+				// recarrega o formulário para exibir os erros de validação
+				$this->atualizarconta();
+			}
+		} // function
+
+		public function quemseguir()		//criado ##########
+
+		{ 
+
+				// procura os dados no bd
+
+				$usuario = $this->Usuarios->get($this->session->userdata('user_id'));
+				$dados = array();
+				$dados['usuario']        = $usuario;
+				$dados['num_seguidores'] = $this->Seguidores->countFollowers($usuario->codigo);
+				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
+				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
+				
+
+				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
+
+				foreach ($resultados as $resultado) {
+
+					$resultado->mostrarseguir=	TRUE;
+
+
+					if (!$this->Seguidores->verificarSeguidor(
+						$this->session->userdata('user_id'),
+						$resultado->codigo)){
+						$resultado->seguindo = FALSE;
+
+						
+					}
+					else{
+						$resultado->seguindo = TRUE;
+					}
+
+
+				}
+
+
+				$dados["resultados"]=$resultados;
+				$this->load->view("principal",$dados);
+
+				
+				
+				
 		}
 
 

@@ -78,7 +78,7 @@
                 <li><a href="#"><i class="glyphicon glyphicon-home"></i> Início</a></li>
                 <li><a href="#"><i class="glyphicon glyphicon-bell"></i> Notificações</a></li>
                 <li><a href="#"><strong><big>#</big></strong> Descobrir</a></li>
-                <li><a href="#"><i class="glyphicon glyphicon-user"></i> Conta</a></li>
+                <li><a href="<?=base_url();?>usuario/atualizarconta" title="Sair"><i class="glyphicon glyphicon-user"></i> Conta</a></li>
               </ul>
             </div><!-- col -->
             <div class="col-lg-6 col-md-6">
@@ -104,8 +104,9 @@
                   </div>
                 </form>
 
+                <li><a href="<?=base_url();?>usuario/sair" title="Sair"><i class="glyphicon glyphicon-off"></i></a></li>
                 <li><a href="#" title="Mensagens"><i class="glyphicon glyphicon-envelope"></i></a></li>
-                <li><a href="#" title="Configurações"><i class="glyphicon glyphicon-cog"></i></a></li>
+                <li><a href="#" title="Configurações" ><i class="glyphicon glyphicon-cog"></i></a></li>
                 <li><a href="#" title="Novo tweet"><i class="glyphicon glyphicon-edit"></i></a></li>
                 
               </ul>
@@ -181,7 +182,7 @@
          </div><!-- panel -->
          <div class="panel panel-default">
           <div class="panel-body">
-            <big style="font-size: 22px; letter-spacing: 1.5px;">Quem seguir</big> · <a href="#">Atualizar</a> · <a href="#">Ver todos</a>
+            <big style="font-size: 22px; letter-spacing: 1.5px;">Quem seguir</big> · <a href="#">Atualizar</a> · <a href="<?=base_url();?>usuario/quemseguir" >Ver todos</a>
           </div>
          </div><!-- panel -->
         </div><!-- col -->
@@ -193,12 +194,24 @@
             </div>
             <div class="panel-body">
 
+
+
+
                 <?php if (isset($resultados))
                   foreach ($resultados as $resultado) {
                 ?>
-                   <div class="panel panel-default">   
 
-                    <?php if (($usuario->login) == ($resultado->login)) {?>
+                  
+
+                  <?php if ($resultado->mostrarseguir)  { ?>
+                    
+                  <?php if (!$resultado->seguindo)  { ?>
+
+
+
+                  <div class="panel panel-default">   
+
+                    <?php if (($usuario->login) != ($resultado->login)) {?>
 
                     <div class="panel-body" >
                         
@@ -226,32 +239,44 @@
                         class="form-control" placeholder="Login"
                         value="<?=$resultado->login?>">
                       </div>
-                      <div class="col-lg-12 col-md-12 col-sm-12">
-                        <label for="descricao">Descrição</label>
-                        <input name="descricao" id="descricao" readonly
-                          class="form-control" placeholder="Descrição detalhada da conta"
-                          value="<?=$resultado->descricao?>">
-                      </div>                    
 
-                      <div class="col-lg-4 col-md-4 col-sm-4">
-                        <small class="sum-label">TWEETS</small><br>
-                        <a class="sum" value="#"><?=$resultado->num_tweets?></a>
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4">
-                        <small class="sum-label">SEGUINDO</small><br>
-                        <a class="sum" value="#"><?=$resultado->num_seguindo?></a>
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4">
-                        <small class="sum-label">SEGUIDORES</small><br>
-                        <a class="sum" value="#"><?=$resultado->num_seguidores?></a>
-                      </div>
                       <div class="col-lg-12 col-md-12 col-sm-12">
 
+                      <br />
+                        
+                        <button  id="seguir" type="submit" onclick="action='<?=base_url();?>usuario/seguir'"
+                          class="btn btn-primary ">Seguir
+                        </button>
 
-                        <!--  sem botões -->
+                        <?php } ?>
 
+                      
                       </div>
-                    </div> <?php } else { ?>
+
+                      </form>                     
+                     </div>
+                  </div>
+                <?php
+                } ?>
+
+                <?php
+                } ?>
+
+                <?php } ?>
+
+                
+
+
+
+                <?php if (isset($resultados))
+                  foreach ($resultados as $resultado) {
+                ?>
+
+                <?php if (!$resultado->mostrarseguir)  { ?>
+
+                   <div class="panel panel-default">   
+
+                    <?php if (($usuario->login) != ($resultado->login)) {?>
 
                     <div class="panel-body" >
                         
@@ -319,9 +344,6 @@
 
                       </div>
 
-
-
-
                       </form>                     
                      </div>
                   </div>
@@ -330,6 +352,12 @@
 
                 <?php
                 } ?>
+
+                <?php } ?>
+
+
+
+                       
 
             </div>
           </div><!-- panel -->

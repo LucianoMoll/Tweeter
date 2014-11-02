@@ -31,4 +31,9 @@
 				'codigo_seguido' => $seguido))->
 			get('seguidores')->row();
 		}
+
+		public function seguidosdoseguido($seguidor)
+		{
+			
+		}
 	}
