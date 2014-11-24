@@ -287,6 +287,8 @@
 				$dados["texto"]=$this->input->post("texto");
 				$dados["codigo_usuario"]=$this->session->userdata("user_id");
 				$dados["data_hora_postagem"]=date("Y-m-d h:i:s");
+
+
 				// insere os dados no bd
 				$id = $this->Tweets->insert($dados);
 
@@ -332,6 +334,8 @@
 				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
 				$dados['seguir']		 = FALSE;
+
+				$dados['clicartweets']     = FALSE;
 
 				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
 
@@ -412,13 +416,14 @@
 				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
 
+				$dados['clicartweets']     = FALSE;
 
 				$resultados = $this->Usuarios->buscar($this->input->post("buscar"));
 
 				foreach ($resultados as $resultado) {
 
 					$resultado->mostrarseguir=	TRUE;
-					$resultado->texto = $this->Tweets->getByTexto($resultado->codigo);
+
 
 					if (!$this->Seguidores->verificarSeguidor(
 						$this->session->userdata('user_id'),
@@ -456,7 +461,9 @@
 				$dados['num_seguindo']   = $this->Seguidores->countFollowing($usuario->codigo);
 				$dados['num_tweets']     = $this->Tweets->countByUser($usuario->codigo);
 
+				$dados['tweets']     = $this->Tweets->getByCodigo($usuario->codigo);
 				
+				$dados['clicartweets']     = TRUE;
 
 
 				$this->load->view("principal",$dados);

@@ -14,18 +14,13 @@
 
 		public function getByCodigo($codigo)
 		{
-			return $this->db->where('codigo', $codigo)->get('tweets')->row();
+			return $this->db->where('codigo_usuario', $codigo)->get('tweets')->result();
 		}
 
-		public function getByTexto($texto)
-		{
-			return $this->db->where('texto', $texto)->get('tweets')->row();
-		}
+		
 
-		public function getByData($data)
-		{
-			return $this->db->where('data_hora_postagem', $data)->get('tweets')->row();
-		}
+
+		
 
 	}
 

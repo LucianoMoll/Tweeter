@@ -54,6 +54,7 @@
         text-decoration: none;
         font-size: 24px;
       }
+
       
     </style>
   </head>
@@ -190,9 +191,53 @@
         <div class="col-lg-8 col-md-8">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <big style="font-size: 22px;">Tweets</big>
-            </div>
-            <div class="panel-body">
+
+
+
+              <big style="font-size: 22px;" id="titulo" >Tweets</big>
+                  </div>
+                  <div class="panel-body">
+                      <div class="panel panel-default"> 
+
+
+                     
+
+                            <?php if (isset($tweets))
+                            
+                            
+
+                            foreach ($tweets as $tweet) {
+                              
+                              ?>
+                                
+
+                                        <div class="panel-body" >
+                                          
+                                          <div class="col-lg-8 col-md-8 col-sm-8">
+                                            <label for="texto">Texto</label>
+                                            <textarea type="text" name="texto" id="texto" readonly
+                                            class="form-control" rows="3" placeholder="<?=$tweet->texto?>"
+                                            value="<?=$tweet->texto?>"></textarea>
+                                         </div>
+
+                                         <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <label for="data">Data e Hora</label>
+                                            <input type="data" name="data" id="data" readonly
+                                            class="form-control" rows="1" placeholder="Data"
+                                            value="<?=$tweet->data_hora_postagem?>">
+                                         </div>
+                                     
+                                        </div>
+                                      </div>
+
+
+                              <?php } ?>
+
+                 
+
+
+
+
 
 
 
@@ -226,10 +271,6 @@
                         <input type="text" name="nome" id="nome" readonly
                         class="form-control" placeholder="Nome completo"
                         value="<?=$resultado->nome?>">
-
-
-
-
 
                       </div>
                       <div class="col-lg-4 col-md-4 col-sm-4">
